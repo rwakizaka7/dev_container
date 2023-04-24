@@ -1,8 +1,9 @@
-limactl stop $1
-limactl delete $1
-limactl start --name=$1 template://docker
-limactl stop $1
-cp -f ./lima.yaml ~/.lima/$1/lima.yaml
-limactl start $1
-docker context create lima-$1 --docker "host=unix://~/.lima/$1/sock/docker.sock"
-docker context use lima-$1
+LIMA_NAME=docker-vm
+limactl stop -f $LIMA_NAME
+limactl delete $LIMA_NAME
+limactl start --name=$LIMA_NAME template://docker
+limactl stop $LIMA_NAME
+cp -f ./lima.yaml ~/.lima/$LIMA_NAME/lima.yaml
+limactl start $LIMA_NAME
+docker context create lima-$LIMA_NAME --docker "host=unix://~/.lima/$LIMA_NAME/sock/docker.sock"
+docker context use lima-$LIMA_NAME

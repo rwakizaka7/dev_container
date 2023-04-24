@@ -17,8 +17,8 @@ services:
     build: ./mysql
     environment:
       MYSQL_DATABASE: docker_db
-      MYSQL_USER: docker_user
-      MYSQL_PASSWORD: docker_pass
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Tokyo
     volumes:

@@ -129,9 +129,9 @@ mounts:
 #### 3.DockerのMySQLに接続
 ```
 % docker ps -a
-% mysql -u root -h 127.0.0.1 --port 3306 docker_db -p
+% mysql -u root --host 127.0.0.1 --port 3306 docker_db -p
 % cd /Users/ryota32/pc_data/project/dev_container/docker/mysql/ddl
-% mysql --user=root --password=root -h 127.0.0.1 --port 3306 --local-infile docker_db -e "LOAD DATA LOCAL INFILE './3_test1_table_import.csv' INTO TABLE TEST1_TABLE FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n'"
+% mysql --user=root --password=root --host 127.0.0.1 --port 3306 --local-infile docker_db -e "LOAD DATA LOCAL INFILE './3_test1_table_import.csv' INTO TABLE TEST1_TABLE FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n'"
 ```
 
 #### 4.WebサーバーのDocker(コンテナ)に入る
@@ -173,13 +173,16 @@ mounts:
 
 #### 9.Docker再構築スクリプト
 ```
-% sh limactl_setup.sh docker-vm
-limactl stop $1
-limactl delete $1
-limactl start --name=$1 template://docker
-limactl stop $1
-cp -f ./lima.yaml ~/.lima/$1/lima.yaml
-limactl start $1
+% sh limactl_setup.sh
+LIMA_NAME=docker-vm
+limactl stop -f $LIMA_NAME
+limactl delete $LIMA_NAME
+limactl start --name=$LIMA_NAME template://docker
+limactl stop $LIMA_NAME
+cp -f ./lima.yaml ~/.lima/$LIMA_NAME/lima.yaml
+limactl start $LIMA_NAME
+docker context create lima-$LIMA_NAME --docker "host=unix://~/.lima/$LIMA_NAME/sock/docker.sock"
+docker context use lima-$LIMA_NAME
 ```
 
 #### 10.コマンドでPHPにアクセスする
