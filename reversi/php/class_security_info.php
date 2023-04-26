@@ -1,5 +1,5 @@
 <?php
-require_once 'utils.php';
+require_once 'class_utils.php';
 class SecurityInfo
 {
     public static function getDBConnectionInfo() {

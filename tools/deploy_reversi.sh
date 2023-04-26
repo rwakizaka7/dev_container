@@ -7,7 +7,7 @@ cd ../reversi
 for FILE in `ls -A | grep --line-buffered -v .DS_Store`; do
     rsync -a --exclude .DS_Store ${FILE} $REMOTE_HOST:$PATH_TO_REPLACE
 done
-scp $SECURITY_FILE_PATH/php/security_info.php $REMOTE_HOST:$PATH_TO_REPLACE/php/security_info.php
+scp $SECURITY_FILE_PATH/php/class_security_info.php $REMOTE_HOST:$PATH_TO_REPLACE/php/class_security_info.php
 open https://wakizaka24.sakura.ne.jp/reversi/
-open https://wakizaka24.sakura.ne.jp/reversi/php/info.php
-open https://wakizaka24.sakura.ne.jp/reversi/php/db_connection_test.php
+open https://wakizaka24.sakura.ne.jp/reversi/php/page_php_info.php
+open https://wakizaka24.sakura.ne.jp/reversi/php/page_db_connection_test.php

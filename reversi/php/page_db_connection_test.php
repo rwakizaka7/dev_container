@@ -1,7 +1,7 @@
 <?php
-require_once 'security_info.php';
+require_once 'class_security_info.php';
+$info = SecurityInfo::getDBConnectionInfo();
 try {
-    $info = SecurityInfo::getDBConnectionInfo();
     $sql = 'SELECT * FROM TEST1_TABLE;';
     $statement = (new PDO($info['dns'], $info['username'], $info['password']))->prepare($sql);
     $statement->execute();
