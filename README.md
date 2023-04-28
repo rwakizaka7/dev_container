@@ -123,7 +123,7 @@ mounts:
 
 #### 2.MySQLの永続化されたDBを削除する
 ```
-% rm -rf /Users/ryota32/pc_data/project/dev_container/docker/mysql/db/*
+% rm -r /Users/ryota32/pc_data/project/dev_container/docker/mysql/db/*
 ```
 
 #### 3.DockerのMySQLに接続
@@ -187,5 +187,5 @@ docker context use lima-$LIMA_NAME
 
 #### 10.コマンドでPHPにアクセスする
 ```
-% curl --include "http://localhost:8080/reversi/php/db_connect_test.php"
+% curl --include "http://localhost:8080/reversi/php/page_db_connect_test.php"
 ```

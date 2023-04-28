@@ -23,7 +23,7 @@ services:
       TZ: Asia/Tokyo
     volumes:
       - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./mysql/ddl:/var/lib/docker-entrypoeint-initdb.d
+      - ./mysql/ddl:/docker-entrypoeint-initdb.d
       - ./mysql/db:/var/lib/mysql
     user: "1000:1000"
     ports:
