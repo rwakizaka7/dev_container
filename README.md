@@ -187,5 +187,5 @@ docker context use lima-$LIMA_NAME
 
 #### 10.コマンドでPHPにアクセスする
 ```
-% curl --include "http://localhost:8080/reversi/php/page_db_connect_test.php"
+% curl --include "http://localhost:8080/reversi/php/api1_get_unique_id.php"
 ```
