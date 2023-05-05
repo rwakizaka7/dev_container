@@ -1,3 +1,81 @@
+function getURLQueries() {
+    var queries = {};
+    var queryStr = window.location.search.slice(1);
+
+    if (queryStr) {
+        queryStr.split("&").forEach(function(querySplit) {
+            var list = querySplit.split("=");
+            queries[list[0]] = list[1];
+        });
+    }
+    return queries;
+}
+
+function createQueryStr(queries) {
+    var queryStr = "";
+    Object.keys(queries).forEach(function(key) {
+        if (queryStr) {
+            queryStr += "&";
+        } else {
+            queryStr += "?";
+        }
+        queryStr += key + "=" + queries[key];
+    });
+    return queryStr;
+}
+
+function removeLastSlash(path) {
+    var lastChar = path.slice(-1);
+    if (lastChar == "/") {
+        return path.slice(0, -1);
+    }
+    return path;
+}
+
+const protocol = location.protocol; // http
+const host = location.host; // localhost:8080
+const pathname = removeLastSlash(location.pathname); // /reversi/
+const hash = location.hash; // #
+const htmlOnly = host == "wakizaka24.github.io";
+
+const API1_PATH_NAME = "/reversi/php/api1_get_unique_id.php";
+function requestAPI(method, pathname, params, callback) {
+    var uri = protocol + "//" + host + pathname
+
+    var request = new XMLHttpRequest();
+    request.open(method, uri, true);
+    request.responseType = "json";
+    request.onload = function () {
+        var data = this.response;
+        
+        callback(this.status, data);
+    };
+    request.send();
+}
+
+var queries = getURLQueries();
+
+if (!htmlOnly) {
+    if (!queries["unique_id"]) {
+        requestAPI("GET", API1_PATH_NAME, {}, function(status, data) {
+            if (status == 200) {
+                queries["unique_id"] = data["unique_id"];
+                // console.log(data);
+                var href = protocol + "//" + host + pathname + createQueryStr(queries) + hash;
+                // console.log(href);
+                location.href = href;
+            } else {
+                var errorStr = "APIエラー " +  + status;
+                if (data != null) {
+                    errorStr += "\n" + JSON.stringify(data);
+                }
+                alert(errorStr);
+            }
+        });
+        throw new Error("unique_idを付与します");
+    }
+}
+
 let screenInfo = {
     width: window.innerWidth <= window.innerHeight
         ? window.innerWidth : window.innerHeight,
@@ -21,8 +99,8 @@ let screenInfo = {
 };
 
 let reversiBoardInfo = {
-    key: 'reversi_board',
-    url: 'assets/reversi_board_505x505.svg',
+    key: "reversi_board",
+    url: "assets/reversi_board_505x505.svg",
     width: 505,
     height: 505,
     borderOffsetRate: {
@@ -41,54 +119,54 @@ let reversiBoardInfo = {
 };
 
 let reversiPieceBlankInfo = {
-    key: 'reversi_piece_blank',
-    url: 'assets/reversi_piece_blank_61x61.svg',
+    key: "reversi_piece_blank",
+    url: "assets/reversi_piece_blank_61x61.svg",
     width: 61,
     height: 61
 }
 
 let reversiPieceBlackInfo = {
-    keyBase: 'reversi_piece_black',
-    urls: ['assets/reversi_piece_black_01_61x61.svg',
-        'assets/reversi_piece_black_02_61x61.svg',
-        'assets/reversi_piece_black_03_61x61.svg',
-        'assets/reversi_piece_black_04_61x61.svg',
-        'assets/reversi_piece_black_05_61x61.svg',
-        'assets/reversi_piece_black_06_61x61.svg',
-        'assets/reversi_piece_black_07_61x61.svg',
-        'assets/reversi_piece_black_08_61x61.svg',
-        'assets/reversi_piece_black_09_61x61.svg',
-        'assets/reversi_piece_black_10_61x61.svg',
-        'assets/reversi_piece_black_11_61x61.svg',
-        'assets/reversi_piece_black_12_61x61.svg',
-        'assets/reversi_piece_black_13_61x61.svg'],
+    keyBase: "reversi_piece_black",
+    urls: ["assets/reversi_piece_black_01_61x61.svg",
+        "assets/reversi_piece_black_02_61x61.svg",
+        "assets/reversi_piece_black_03_61x61.svg",
+        "assets/reversi_piece_black_04_61x61.svg",
+        "assets/reversi_piece_black_05_61x61.svg",
+        "assets/reversi_piece_black_06_61x61.svg",
+        "assets/reversi_piece_black_07_61x61.svg",
+        "assets/reversi_piece_black_08_61x61.svg",
+        "assets/reversi_piece_black_09_61x61.svg",
+        "assets/reversi_piece_black_10_61x61.svg",
+        "assets/reversi_piece_black_11_61x61.svg",
+        "assets/reversi_piece_black_12_61x61.svg",
+        "assets/reversi_piece_black_13_61x61.svg"],
     width: 61,
     height: 61
 }
 
 let reversiPieceWhiteInfo = {
-    keyBase: 'reversi_piece_white',
-    urls: ['assets/reversi_piece_white_01_61x61.svg',
-        'assets/reversi_piece_white_02_61x61.svg',
-        'assets/reversi_piece_white_03_61x61.svg',
-        'assets/reversi_piece_white_04_61x61.svg',
-        'assets/reversi_piece_white_05_61x61.svg',
-        'assets/reversi_piece_white_06_61x61.svg',
-        'assets/reversi_piece_white_07_61x61.svg',
-        'assets/reversi_piece_white_08_61x61.svg',
-        'assets/reversi_piece_white_09_61x61.svg',
-        'assets/reversi_piece_white_10_61x61.svg',
-        'assets/reversi_piece_white_11_61x61.svg',
-        'assets/reversi_piece_white_12_61x61.svg',
-        'assets/reversi_piece_white_13_61x61.svg'],
+    keyBase: "reversi_piece_white",
+    urls: ["assets/reversi_piece_white_01_61x61.svg",
+        "assets/reversi_piece_white_02_61x61.svg",
+        "assets/reversi_piece_white_03_61x61.svg",
+        "assets/reversi_piece_white_04_61x61.svg",
+        "assets/reversi_piece_white_05_61x61.svg",
+        "assets/reversi_piece_white_06_61x61.svg",
+        "assets/reversi_piece_white_07_61x61.svg",
+        "assets/reversi_piece_white_08_61x61.svg",
+        "assets/reversi_piece_white_09_61x61.svg",
+        "assets/reversi_piece_white_10_61x61.svg",
+        "assets/reversi_piece_white_11_61x61.svg",
+        "assets/reversi_piece_white_12_61x61.svg",
+        "assets/reversi_piece_white_13_61x61.svg"],
     width: 61,
     height: 61
 }
 
 function setMultiKeyFuncs(info) {
-    info['getKey'] = function (i) {
+    info["getKey"] = function (i) {
         if (this.urls) {
-            return this.keyBase + "_" + String(i).padStart(2, '0');
+            return this.keyBase + "_" + String(i).padStart(2, "0");
         } else {
             return this.key;
         }
@@ -129,15 +207,15 @@ let reversiGaming = {
             let state = states.boardMarix[rowIdx][colIdx];
             let piece = this.pieces[rowIdx][colIdx];
             switch (state) {
-                case 'e': // Empty
+                case "e": // Empty
                     piece.black[0].setVisible(false);
                     piece.white[0].setVisible(false);
                     break;
-                case 'b': // Black
+                case "b": // Black
                     piece.black[0].setVisible(true);
                     piece.white[0].setVisible(false);
                     break;
-                case 'w': // White
+                case "w": // White
                     piece.black[0].setVisible(false);
                     piece.white[0].setVisible(true);
                     break;
@@ -161,11 +239,11 @@ let reversiGaming = {
                     this.reflectPiece(states, rowIdx, colIdx);
                     _completion();
                 } else {
-                    if (piece == 'w') {
-                        this.changePieceAnimation(states, 'black', 'white', 'w',
+                    if (piece == "w") {
+                        this.changePieceAnimation(states, "black", "white", "w",
                         rowIdx, colIdx, 1, _completion);
-                    } else if (piece == 'b') {
-                        this.changePieceAnimation(states, 'white', 'black', 'b',
+                    } else if (piece == "b") {
+                        this.changePieceAnimation(states, "white", "black", "b",
                         rowIdx, colIdx, 1, _completion);
                     }
                 }
@@ -237,10 +315,10 @@ let reversiGaming = {
 
             var changeList = [];
             if (!this.turnWhite) {
-                changeList.push({rowIdx: rowIdx, colIdx: colIdx, piece: 'b', skip: true});
+                changeList.push({rowIdx: rowIdx, colIdx: colIdx, piece: "b", skip: true});
                 this.pieceCounts.black++;
             } else {
-                changeList.push({rowIdx: rowIdx, colIdx: colIdx, piece: 'w', skip: true});
+                changeList.push({rowIdx: rowIdx, colIdx: colIdx, piece: "w", skip: true});
                 this.pieceCounts.white++;
             }
 
@@ -248,10 +326,10 @@ let reversiGaming = {
                 let rowIdx = reverceList[i].rowIdx;
                 let colIdx = reverceList[i].colIdx;
 
-                if (this.boardMarix[rowIdx][colIdx] == 'b') {
-                    changeList.push({rowIdx: rowIdx, colIdx: colIdx, piece: 'w', skip: false});
-                } else if (this.boardMarix[rowIdx][colIdx] == 'w') {
-                    changeList.push({rowIdx: rowIdx, colIdx: colIdx, piece: 'b', skip: false});
+                if (this.boardMarix[rowIdx][colIdx] == "b") {
+                    changeList.push({rowIdx: rowIdx, colIdx: colIdx, piece: "w", skip: false});
+                } else if (this.boardMarix[rowIdx][colIdx] == "w") {
+                    changeList.push({rowIdx: rowIdx, colIdx: colIdx, piece: "b", skip: false});
                 }
             }
 
@@ -284,7 +362,7 @@ let reversiGaming = {
 
             var confirmedReverceList = [];
 
-            if (this.boardMarix[rowIdx][colIdx] != 'e') {
+            if (this.boardMarix[rowIdx][colIdx] != "e") {
                 return confirmedReverceList;
             }
 
@@ -310,9 +388,8 @@ let reversiGaming = {
                     }
     
                     if (first) {
-                        // Opponent's stone
-                        if (!this.turnWhite && this.boardMarix[currentRowIdx][currentColIdx] != 'w'
-                            || this.turnWhite && this.boardMarix[currentRowIdx][currentColIdx] != 'b') {
+                        if (!this.turnWhite && this.boardMarix[currentRowIdx][currentColIdx] != "w"
+                            || this.turnWhite && this.boardMarix[currentRowIdx][currentColIdx] != "b") {
                             break;
                         } else {
                             reverceList.push({
@@ -321,12 +398,11 @@ let reversiGaming = {
                             first = false
                         }
                     } else {
-                        // Own's stone
-                        if (!this.turnWhite && this.boardMarix[currentRowIdx][currentColIdx] == 'b'
-                            || this.turnWhite && this.boardMarix[currentRowIdx][currentColIdx] == 'w') {
+                        if (!this.turnWhite && this.boardMarix[currentRowIdx][currentColIdx] == "b"
+                            || this.turnWhite && this.boardMarix[currentRowIdx][currentColIdx] == "w") {
                             confirmedReverceList = confirmedReverceList.concat(reverceList);
                             break;
-                        } else if (this.boardMarix[currentRowIdx][currentColIdx] == 'e') {
+                        } else if (this.boardMarix[currentRowIdx][currentColIdx] == "e") {
                             break;
                         } else {
                             reverceList.push({
@@ -343,8 +419,8 @@ let reversiGaming = {
             let counts = this.pieceCounts;
             let blackWin = counts.black >= counts.white;
             // Black wins a to b.
-            return (blackWin ? 'Black' : 'White') + ' wins '
-                + counts.black + ' to ' + counts.white + '.';
+            return (blackWin ? "Black" : "White") + " wins "
+                + counts.black + " to " + counts.white + ".";
         }
     },
     pieceSelectionLogic: {
@@ -378,20 +454,20 @@ let reversiGaming = {
 };
 
 function setScreenRateFuncs(info) {
-    info['seekScreenFitZoomRate'] = function (screenInfo) {
+    info["seekScreenFitZoomRate"] = function (screenInfo) {
         let offset = screenInfo.getOffset();
         let offsetY = offset.y
-        this['zoomRate'] = (screenInfo.width - offsetY * 2) / this.width;
+        this["zoomRate"] = (screenInfo.width - offsetY * 2) / this.width;
     };
 
-    info['getZoomSize'] = function () {
+    info["getZoomSize"] = function () {
         return {
             width: this.width * this.zoomRate,
             height: this.height * this.zoomRate
         };
     };
 
-    info['getCenter'] = function () {
+    info["getCenter"] = function () {
         return {
             x: this.getZoomSize().width / 2,
             y: this.getZoomSize().height / 2
@@ -404,14 +480,14 @@ setScreenRateFuncs(reversiPieceBlackInfo);
 setScreenRateFuncs(reversiPieceWhiteInfo);
 
 function setBoardPieceRateFuncs(info) {
-    info['seekScreenFitZoomRate'] = function (screenInfo) {
+    info["seekScreenFitZoomRate"] = function (screenInfo) {
         let offsetX = screenInfo.getOffset().x
             + reversiBoardInfo.getBorderOffset(screenInfo).x;
-        this['zoomRate'] = (screenInfo.width - offsetX * 2
+        this["zoomRate"] = (screenInfo.width - offsetX * 2
             ) / reversiGaming.pieceLineNum / this.width;
     };
 
-    info['getBoardIndexOffset'] = function (screenInfo, colIdx, rowIdx) {
+    info["getBoardIndexOffset"] = function (screenInfo, colIdx, rowIdx) {
         let zoomSize = this.getZoomSize();
         let borderOffset = reversiBoardInfo.getBorderOffset(screenInfo);
         return {
@@ -432,7 +508,7 @@ let game = new Phaser.Game({
     type: Phaser.WEBGL,
     width: screenInfo.width,
     height: screenInfo.height,
-    backgroundColor: '#faf9f6',
+    backgroundColor: "#faf9f6",
     scene: {
         preload: function() {
             [reversiBoardInfo, reversiPieceBlankInfo, reversiPieceBlackInfo,
@@ -532,19 +608,19 @@ let game = new Phaser.Game({
                 let fontSize = reversiBoardInfo.getCenterTextFontSize(screenInfo);
                 //console.log(fontSize);
                 objects.centerText = this.add.text(screenInfo.width / 2,
-                    screenInfo.height / 2, 'Phaser 3')
+                    screenInfo.height / 2, "Phaser 3")
                     .setFontSize(fontSize)
                     .setFontFamily("Arial")
-                    .setColor('#ff00ff')
+                    .setColor("#ff00ff")
                     .setOrigin(0.5)
                     .setVisible(false);
             }
         
-            // this.input.on('gameobjectdown', (pointer, gameobject) => {
-            //     //console.log('d');
+            // this.input.on("gameobjectdown", (pointer, gameobject) => {
+            //     //console.log("d");
             // });
         
-            this.input.on('gameobjectup', (pointer, gameobject) => {
+            this.input.on("gameobjectup", (pointer, gameobject) => {
                 let gaming = reversiGaming;
                 let objects = gaming.objects;
                 let states = gaming.states;
@@ -557,7 +633,7 @@ let game = new Phaser.Game({
 
                 states.selectPiece(index.rowIdx, index.colIdx, null, function(result) {
                     if (result) {
-                        // console.log('--- user ---');
+                        // console.log("--- user ---");
                         // console.log(index);
                         // console.log(states.boardMarix);
                         if (!gaming.vsMode) {
@@ -565,7 +641,7 @@ let game = new Phaser.Game({
                         }
                     }
                 });
-                //console.log('u');
+                //console.log("u");
             });
 
             if (gaming.testMode) {
@@ -574,7 +650,7 @@ let game = new Phaser.Game({
             }
         },
         update: function() {
-            //console.log('update')
+            //console.log("update")
         }
     }
 });
@@ -602,7 +678,7 @@ function cpuTurn(scenes) {
         } else if (!states.skipping) {
             states.turnWhite = !states.turnWhite;
             states.skipping = true;
-            console.log('--- cpu(skip) ---');
+            console.log("--- cpu(skip) ---");
 
             checkNextSelections(scenes)
         } else {
@@ -620,7 +696,7 @@ function afterPieceSelection(scenes, selections) {
     let i = Math.floor(Math.random() * selections.length);
     let selection = selections[i];
     let index = selection.index;
-    // console.log('--- cpu ---');
+    // console.log("--- cpu ---");
     // console.log(index);
 
     states.selectPiece(index.rowIdx, index.colIdx, selection.reverceList, function(result) {
@@ -648,7 +724,7 @@ function checkNextSelections(scenes) {
     } else if (!states.skipping) {
         states.turnWhite = !states.turnWhite;
         states.skipping = true;
-        console.log('--- user(skip) ---');
+        console.log("--- user(skip) ---");
 
         cpuTurn(scenes);
     } else {

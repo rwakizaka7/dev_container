@@ -8,16 +8,23 @@ $uri = Utils::getURI();
 $pdo = new PDO($info['dns'], $info['username'], $info['password']);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+function setDBErrorJson($e) {
+    http_response_code(500);
+    header("Content-Type: application/json; charset=utf-8");
+    echo json_encode(array("code"=>500, "message"=>"DBの実行に失敗しました",
+        "description"=>$e->getMessage()), JSON_UNESCAPED_UNICODE);
+}
+
 // アクセスログを追加する
 try {
     $pdo->beginTransaction();
 
-    $sql = 'INSERT INTO REVERSI_ACCESS_LOG(IP, URI, RESTRICTION) VALUES(:IP, :URI, FALSE);';
+    $sql = "INSERT INTO `REVERSI_ACCESS_LOG`(`IP`, `URI`, `RESTRICTION`) VALUES(:IP, :URI, FALSE);";
     $statement = $pdo->prepare($sql);
-    $statement->bindParam(':IP', $ip, PDO::PARAM_STR);
-    $statement->bindParam(':URI', $uri, PDO::PARAM_STR);
+    $statement->bindParam(":IP", $ip, PDO::PARAM_STR);
+    $statement->bindParam(":URI", $uri, PDO::PARAM_STR);
     $statement->execute();
-} catch (Exception $e) {
+} catch (PDOException $e) {
     $pdo->rollBack();
     http_response_code(500);
     exit;
@@ -46,7 +53,7 @@ try {
     $statement->bindParam(':MAXIMUN_NUMBER_OF_ACCESSES',
         $maximumNumberOfAccesses, PDO::PARAM_INT);
     $statement->execute();
-} catch (Exception $e) {
+} catch (PDOException $e) {
     $pdo->rollBack();
     http_response_code(500);
     exit;
@@ -74,9 +81,11 @@ try {
     }
 
     $pdo->commit();
-} catch (Exception $e) {
+} catch (PDOException $e) {
     $pdo->rollBack();
     http_response_code(500);
     exit;
 }
+
+
 ?>
