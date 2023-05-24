@@ -1,0 +1,4 @@
+<IfModule mod_headers.c>
+   SetEnvIf Origin "^(http://localhost:[0-9]*|https://wakizaka24\.github\.io)$" ALLOWED_ORIGIN=$0
+   Header set Access-Control-Allow-Origin %{ALLOWED_ORIGIN}e env=ALLOWED_ORIGIN
+</IfModule>
