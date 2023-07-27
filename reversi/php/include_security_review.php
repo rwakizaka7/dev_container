@@ -9,10 +9,11 @@ $pdo = new PDO($info['dns'], $info['username'], $info['password']);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 function setDBErrorJson($e) {
-    http_response_code(500);
     header("Content-Type: application/json; charset=utf-8");
     echo json_encode(array("code"=>500, "message"=>"DBの実行に失敗しました",
         "description"=>$e->getMessage()), JSON_UNESCAPED_UNICODE);
+    
+    http_response_code(500);
 }
 
 // アクセスログを追加する

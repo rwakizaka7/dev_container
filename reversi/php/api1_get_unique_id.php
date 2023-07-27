@@ -1,13 +1,17 @@
 <?php
 // curl --include "http://localhost:8080/reversi/php/api1_get_unique_id.php"
+// curl --include "https://wakizaka24.sakura.ne.jp/reversi/php/api1_get_unique_id.php"
 // http://localhost:3000
+
 require_once "include_security_review.php";
 require_once "class_utils.php";
 require_once "class_security_info.php";
 $retryCount = 3;
 $info = SecurityInfo::getDBConnectionInfo();
-$pdo = new PDO($info["dns"], $info["username"], $info["password"]);
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$pdo = new PDO($info["dns"], $info["username"], $info["password"],
+    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
+
 try {
     $pdo->beginTransaction();
     
@@ -35,9 +39,10 @@ try {
     $res = $statement->execute();
     $pdo->commit();
 
-    http_response_code(200);
     header("Content-Type: application/json; charset=utf-8");
     echo json_encode(array("unique_id"=>$uniqid), JSON_UNESCAPED_UNICODE);
+
+    http_response_code(200);
 } catch (PDOException $e) {
     $pdo->rollBack();
     setDBErrorJson($e);
