@@ -30,15 +30,15 @@ mounts:
   writable: true
 - location: "/tmp/lima"
   writable: true
-- location: "/Users/rwakizaka/pc_data/project/rwakizaka32/dev_container/docker"
+- location: "/Users/ryota32/pc_data/project/dev_container/docker"
   writable: true
-- location: "/Users/rwakizaka/pc_data/project/rwakizaka32/dev_container/docker/web"
+- location: "/Users/ryota32/pc_data/project/dev_container/docker/web"
   writable: true
-- location: "/Users/rwakizaka/pc_data/project/rwakizaka32/dev_container/docker/mysql"
+- location: "/Users/ryota32/pc_data/project/dev_container/docker/mysql"
   writable: true
-- location: "/Users/rwakizaka/pc_data/project/rwakizaka32/dev_container/docker/mysql/ddl"
+- location: "/Users/ryota32/pc_data/project/dev_container/docker/mysql/ddl"
   writable: true
-- location: "/Users/rwakizaka/pc_data/project/rwakizaka32/dev_container/docker/mysql/db"
+- location: "/Users/ryota32/pc_data/project/dev_container/docker/mysql/db"
   writable: true
 # containerd is managed by Docker, not by Lima, so the values are set to false here.
 containerd:
