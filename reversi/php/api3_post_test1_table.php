@@ -2,24 +2,24 @@
 /*
 curl --include "http://localhost:8080/reversi/php/api3_post_test1_table.php" \
 -X POST -H "Content-Type: application/json" \
--d '{ \
+-d '{
     "table1_values": [
-        { \
-            "COLUM1": "3", \
-            "COLUM2": "Value 3" \
-        } \
-    ] \
+        {
+            "COLUM1": "3",
+            "COLUM2": "Value 3"
+        }
+    ]
 }'
 
 curl --include "https://wakizaka24.sakura.ne.jp/reversi/php/api3_post_test1_table.php" \
 -X POST -H "Content-Type: application/json" \
--d '{ \
+-d '{
     "table1_values": [
-        { \
-            "COLUM1": "3", \
-            "COLUM2": "Value 3" \
-        } \
-    ] \
+        {
+            "COLUM1": "3",
+            "COLUM2": "Value 3"
+        }
+    ]
 }'
 
 http://localhost:3000
@@ -44,7 +44,7 @@ $pdo = new PDO($info["dns"], $info["username"], $info["password"],
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
 
 $key = "table1_values";
-$bodyStr = stripslashes(file_get_contents("php://input"));
+$bodyStr = file_get_contents("php://input");
 //var_dump($bodyStr);
 $body = json_decode($bodyStr, true);
 
