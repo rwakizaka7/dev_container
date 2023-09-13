@@ -40,7 +40,7 @@ try {
     header("Access-Control-Allow-Methods: GET");
     header("Access-Control-Allow-Headers: Content-Type, "
         ."Access-Control-Allow-Headers, Authorization, X-Requested-With");
-    echo json_encode(array("data"=>$data ?: json_encode([], JSON_FORCE_OBJECT)),
+    echo json_encode(array("data"=>$data ?: null),
         JSON_UNESCAPED_UNICODE);
 
     http_response_code(200);
