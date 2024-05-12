@@ -1,6 +1,6 @@
 REMOTE_HOST=wakizaka24@wakizaka24.sakura.ne.jp
 PATH_TO_REPLACE=/home/wakizaka24/www/reversi
-SECURITY_FILE_PATH=/Users/ryota32/pc_data/secret_data
+SECURITY_FILE_PATH=/Users/ryota24/pc_data/secret_data
 ssh $REMOTE_HOST mkdir $PATH_TO_REPLACE
 ssh $REMOTE_HOST rm -rf $PATH_TO_REPLACE/*
 cd ../reversi

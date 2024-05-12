@@ -3,5 +3,14 @@
     "dockerComposeFile": "../docker/docker-compose.yml",
     "service": "web",
     "workspaceFolder": "/var/www/html",
-    "remoteUser": "root"
+    "remoteUser": "root",
+    "customizations": {
+        "vscode": {
+            "settings": {},
+
+            "extensions": [
+                "xdebug.php-pack"
+            ]
+        }
+    }
 }

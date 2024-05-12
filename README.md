@@ -2,22 +2,32 @@
 
 ## バージョン
 ```
-MacBook Air M1 2020
-macOS Ventura
-Visual Studio Code バージョン 1.77.3
-limactl version 0.15.0
-Docker version 23.0.3, build 3e7cbfdee1
-Docker Compose version 2.17.2
-mysql  Ver 8.0.32 for macos13.0 on arm64 (Homebrew)
+MacBook Air M3 2024
+macOS Sonoma 14.3
+Visual Studio Code バージョン 1.89.1
+
+limactl version 0.22.0
+Docker version 26.1.2, build 211e74b240
+Docker Compose version 2.27.0
+mysql  Ver 8.0.37 for macos14.4 on arm64 (Homebrew)
 ```
 
 ## インストール
 ### 1.limaとdocker等のインストール
 ```
-% brew install lima docker docker-cli docker-compose mysql
-% limactl —version
-% docker —version
+% brew install lima
+% limactl --version
+
+% brew install docker
+% docker --version
+
+% brew install boot2docker-cli docker-compose
 % docker-compose version
+
+% brew install mysql@8.0
+% vi ~/.zshrc
+% export PATH=/opt/homebrew/opt/mysql@8.0/bin:$PATH
+% source ~/.zshrc
 % mysql --version
 ```
 
@@ -30,7 +40,7 @@ mysql  Ver 8.0.32 for macos13.0 on arm64 (Homebrew)
 ### 3.Docker Contextの設定
 #### 3-1.Docker Contextを作成する。
 ```
-% docker context create lima-docker-vm --docker "host=unix:///Users/ryota32/.lima/docker-vm/sock/docker.sock"
+% docker context create lima-docker-vm --docker "host=unix:///Users/ryota24/.lima/docker-vm/sock/docker.sock"
 ```
 
 #### 3-2.現在のコンテキストを選択する。
@@ -74,22 +84,22 @@ mounts:
   writable: true
 - location: "/tmp/lima"
   writable: true
-- location: "/Users/ryota32/pc_data/project/dev_container/docker"
+- location: "/Users/ryota24/pc_data/project/dev_container/docker"
   writable: true
-- location: "/Users/ryota32/pc_data/project/dev_container/docker/web"
+- location: "/Users/ryota24/pc_data/project/dev_container/docker/web"
   writable: true
-- location: "/Users/ryota32/pc_data/project/dev_container/docker/mysql"
+- location: "/Users/ryota24/pc_data/project/dev_container/docker/mysql"
   writable: true
-- location: "/Users/ryota32/pc_data/project/dev_container/docker/mysql/ddl"
+- location: "/Users/ryota24/pc_data/project/dev_container/docker/mysql/ddl"
   writable: true
-- location: "/Users/ryota32/pc_data/project/dev_container/docker/mysql/db"
+- location: "/Users/ryota24/pc_data/project/dev_container/docker/mysql/db"
   writable: true
 ```
 
 ### VSCode
 
-#### 1.Dev Containerプラグインをインストールする。
-#### 2.リモート(仮想LinuxのDocker内)に入る時は、左下の緑のボタン、Reopen in Containerを選択する。
+#### 1.Dev Containersプラグインをインストールする。
+#### 2.リモート(仮想LinuxのDocker内)に入る時は、左下の緑のボタン、Reopen in Container(コンテナで再度開く)を選択する。
 #### 3.ローカルに戻る時は、左下の緑のボタン、Reopen Folder Locallyを選択する。
 
 ### Docker操作
@@ -107,15 +117,15 @@ mounts:
   writable: true
 - location: "/tmp/lima"
   writable: true
-- location: "/Users/ryota32/pc_data/project/dev_container/docker"
+- location: "/Users/ryota24/pc_data/project/dev_container/docker"
   writable: true
-- location: "/Users/ryota32/pc_data/project/dev_container/docker/web"
+- location: "/Users/ryota24/pc_data/project/dev_container/docker/web"
   writable: true
-- location: "/Users/ryota32/pc_data/project/dev_container/docker/mysql"
+- location: "/Users/ryota24/pc_data/project/dev_container/docker/mysql"
   writable: true
-- location: "/Users/ryota32/pc_data/project/dev_container/docker/mysql/ddl"
+- location: "/Users/ryota24/pc_data/project/dev_container/docker/mysql/ddl"
   writable: true
-- location: "/Users/ryota32/pc_data/project/dev_container/docker/mysql/db"
+- location: "/Users/ryota24/pc_data/project/dev_container/docker/mysql/db"
   writable: true
 
 % limactl start docker-vm
@@ -123,14 +133,14 @@ mounts:
 
 #### 2.MySQLの永続化されたDBを削除する
 ```
-% rm -r /Users/ryota32/pc_data/project/dev_container/docker/mysql/db/*
+% rm -r /Users/ryota24/pc_data/project/dev_container/docker/mysql/db/*
 ```
 
 #### 3.DockerのMySQLに接続
 ```
 % docker ps -a
 % mysql -u root --host 127.0.0.1 --port 3306 docker_db -p
-% cd /Users/ryota32/pc_data/project/dev_container/docker/mysql/ddl
+% cd /Users/ryota24/pc_data/project/dev_container/docker/mysql/ddl
 % mysql --user=root --password=root --host 127.0.0.1 --port 3306 --local-infile docker_db -e "LOAD DATA LOCAL INFILE './3_test1_table_import.csv' INTO TABLE TEST1_TABLE FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n'"
 ```
 
@@ -151,14 +161,14 @@ mounts:
 
 #### 6.MySQLが起動しない場合などのログ
 ```
-% cd /Users/ryota32/pc_data/project/dev_container/docker
+% cd /Users/ryota24/pc_data/project/dev_container/docker
 % docker ps -a
 % docker-compose logs
 ```
 
 #### 7.Dockerをビルドし直す(MySQL単体で動作を見たい時など)
 ```
-% cd /Users/ryota32/pc_data/project/dev_container/docker
+% cd /Users/ryota24/pc_data/project/dev_container/docker
 % docker-compose down
 % docker-compose build
 % docker-compose up -d
@@ -173,6 +183,7 @@ mounts:
 
 #### 9.Docker再構築スクリプト
 ```
+% cd /Users/ryota24/pc_data/project/dev_container/tools/limactl_setup
 % sh limactl_setup.sh
 LIMA_NAME=docker-vm
 limactl stop -f $LIMA_NAME
@@ -189,3 +200,18 @@ docker context use lima-$LIMA_NAME
 ```
 % curl --include "http://localhost:8080/reversi/php/api1_get_unique_id.php"
 ```
+
+#### 11.MySQLのアクセス方法
+http://localhost:3000
+データベースの種類: MySQL
+サーバー: db
+ユーザー名: user
+パスワード: user
+データベース: docker_db
+
+#### 12.PHPデバッグ方法
+#### 1.リモート(仮想LinuxのDocker内)に入る(左下の緑のボタン、Reopen in Containerを選択する)。
+#### 2.PHP Extension Packプラグインをインストールする。
+#### 3.RUN AND DEBUGでListen for Xdebugを実行する。
+#### 3.api1_get_unique_id.phpにブレークを付ける。
+#### 4.コマンドでPHPにアクセスする。
